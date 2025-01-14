@@ -1,4 +1,4 @@
-name: 'cf-speed-dns-push'
+name: 'dns_cf_push'
 
 on:
   schedule:
@@ -13,14 +13,13 @@ jobs:
       - name: 'Set up Python'
         uses: actions/setup-python@v4
         with:
-          python-version: 3.7
+          python-version: 3.12
       - name: 'Install dependencies'
         run: if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: 'run dnspod'
+      - name: 'run dnscf'
         env:
-          DOMAIN: ${{ secrets.DOMAIN }}
-          SUB_DOMAIN: ${{ secrets.SUB_DOMAIN }}
-          SECRETID: ${{ secrets.SECRETID }}
-          SECRETKEY: ${{ secrets.SECRETKEY }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          CF_DNS_NAME: ${{ secrets.CF_DNS_NAME }}
           PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
-        run: python dnspod.py
+        run: python dnscf.py

@@ -13,8 +13,9 @@ CF_DNS_NAME     =   os.environ["CF_DNS_NAME"]
 PUSHPLUS_TOKEN  =   os.environ["PUSHPLUS_TOKEN"]
 
 
+
 headers = {
-    'Authorization': f'Bearer {api_token}',
+    'Authorization': f'Bearer {CF_API_TOKEN}',
     'Content-Type': 'application/json'
 }
 
@@ -35,7 +36,7 @@ def get_cf_speed_test_ip(timeout=10, max_retries=5):
 # 获取 DNS 记录
 def get_dns_records(name):
     def_info = []
-    url = f'https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records'
+    url = f'https://api.cloudflare.com/client/v4/zones/{CF_ZONE_ID}/dns_records'
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
         records = response.json()['result']
@@ -48,7 +49,7 @@ def get_dns_records(name):
 
 # 更新 DNS 记录
 def update_dns_record(record_id, name, cf_ip):
-    url = f'https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records/{record_id}'
+    url = f'https://api.cloudflare.com/client/v4/zones/{CF_ZONE_ID}/dns_records/{record_id}'
     data = {
         'type': 'A',
         'name': name,
@@ -72,7 +73,7 @@ def push_plus(content):
     url = 'http://www.pushplus.plus/send'
     data = {
         "token": PUSHPLUS_TOKEN,
-        "title": "IP优选actions推送",
+        "title": "IP优选DNSCF推送",
         "content": content,
         "template": "markdown",
         "channel": "wechat"
